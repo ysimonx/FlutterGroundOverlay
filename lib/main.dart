@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -36,9 +37,6 @@ class _MapScreenState extends State<MapScreen> {
 
   final MapController _mapController = MapController();
 
-  // Angle de rotation de l'overlay (indépendant de la carte)
-  double _overlayRotation = 0.0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,103 +66,90 @@ class _MapScreenState extends State<MapScreen> {
             maxZoom: 19,
           ),
 
-          // Marqueur sur la Tour Eiffel
-          MarkerLayer(
-            markers: [
-              Marker(
-                point: eiffelTowerLocation,
-                width: 40,
-                height: 40,
-                child: const Icon(
-                  Icons.location_pin,
-                  size: 40,
-                  color: Colors.red,
+          // Overlay du logo Batman sur la Tour Eiffel (s'adapte au zoom)
+          OverlayImageLayer(
+            overlayImages: [
+              OverlayImage(
+                bounds: LatLngBounds(
+                  const LatLng(48.857370, 2.293481), // Sud-Ouest
+                  const LatLng(48.859370, 2.295481), // Nord-Est
                 ),
+                opacity: 0.7,
+                imageProvider: const AssetImage('assets/images/batman_logo.png'),
               ),
             ],
           ),
 
-          // Overlay rotatif du logo Batman sur la Tour Eiffel
+          // Marqueur Google Maps style au centre du logo Batman
+          // Ne tourne pas et garde une taille fixe
           MarkerLayer(
             markers: [
               Marker(
                 point: eiffelTowerLocation,
-                width: 200,
-                height: 200,
-                rotate: true, // Garde l'orientation fixe par rapport à l'écran
-                child: Transform.rotate(
-                  angle: _overlayRotation * (3.14159 / 180), // Conversion en radians
-                  child: Opacity(
-                    opacity: 0.7,
-                    child: Image.asset(
-                      'assets/images/batman_logo.png',
-                      width: 200,
-                      height: 200,
+                width: 50,
+                height: 60,
+                rotate: true, // Reste toujours orienté vers le haut
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Ombre du marqueur
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        width: 30,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
                     ),
-                  ),
+                    // Pin principal
+                    Positioned(
+                      bottom: 5,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Cercle supérieur
+                          Container(
+                            width: 32,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 3),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.circle,
+                                size: 8,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          // Pointe du pin
+                          CustomPaint(
+                            size: const Size(12, 10),
+                            painter: PinPointerPainter(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ],
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // Contrôles de l'overlay à gauche
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Overlay',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ),
-              const SizedBox(height: 5),
-              FloatingActionButton.small(
-                heroTag: 'overlay_rotate_left',
-                onPressed: () {
-                  setState(() {
-                    _overlayRotation -= 15.0;
-                  });
-                },
-                tooltip: 'Rotation overlay gauche (15°)',
-                child: const Icon(Icons.rotate_left, size: 20),
-              ),
-              const SizedBox(height: 5),
-              FloatingActionButton.small(
-                heroTag: 'overlay_rotate_right',
-                onPressed: () {
-                  setState(() {
-                    _overlayRotation += 15.0;
-                  });
-                },
-                tooltip: 'Rotation overlay droite (15°)',
-                child: const Icon(Icons.rotate_right, size: 20),
-              ),
-              const SizedBox(height: 5),
-              FloatingActionButton.small(
-                heroTag: 'overlay_reset',
-                onPressed: () {
-                  setState(() {
-                    _overlayRotation = 0.0;
-                  });
-                },
-                tooltip: 'Réinitialiser rotation overlay',
-                child: const Icon(Icons.refresh, size: 20),
-              ),
-            ],
-          ),
-          const SizedBox(width: 10),
-          // Contrôles de la carte à droite
-          Column(
+      floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
@@ -235,9 +220,40 @@ class _MapScreenState extends State<MapScreen> {
                 child: const Icon(Icons.remove),
               ),
             ],
-          ),
-        ],
       ),
     );
   }
+}
+
+// Custom painter pour la pointe du marqueur (style Google Maps)
+class PinPointerPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.fill;
+
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.3)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+
+    final path = ui.Path();
+    // Dessine un triangle pointant vers le bas
+    path.moveTo(size.width / 2, size.height); // Pointe en bas
+    path.lineTo(0, 0); // Coin gauche
+    path.lineTo(size.width, 0); // Coin droit
+    path.close();
+
+    // Dessine l'ombre
+    canvas.save();
+    canvas.translate(1, 1);
+    canvas.drawPath(path, shadowPaint);
+    canvas.restore();
+
+    // Dessine la pointe
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

@@ -8,8 +8,14 @@ Application Flutter qui affiche une carte OpenStreetMap centrée sur la Tour Eif
 - Vue centrée sur la Tour Eiffel (48.858370, 2.294481)
 - Overlay personnalisé avec le logo Batman au-dessus de la Tour Eiffel
 - Marqueur rouge sur la Tour Eiffel
+- **Gestes tactiles complets** 🤏 :
+  - Pinch to zoom (pincez pour zoomer/dézoomer)
+  - Rotation à deux doigts
+  - Pan/Drag (glissement pour déplacer)
+  - Double tap pour zoom rapide
+  - Fling (défilement inertiel)
 - **Rotation de la carte** : Rotation tactile ou par boutons (45° par clic)
-- **Rotation d'overlay indépendante** ⭐ NOUVEAU : L'overlay peut tourner séparément (15° par clic)
+- **Rotation d'overlay indépendante** ⭐ : L'overlay peut tourner séparément (15° par clic)
 - Contrôles de zoom (+/-)
 - Interface à deux colonnes : contrôles overlay (gauche) et carte (droite)
 - Bouton de recentrage et réinitialisation des rotations
@@ -86,7 +92,18 @@ Les permissions sont automatiquement gérées par Flutter.
 
 ## Utilisation
 
-### Contrôles de base
+### Gestes tactiles 🤏
+
+L'application supporte tous les gestes tactiles standards :
+- **Pinch to zoom** : Pincez avec deux doigts pour zoomer/dézoomer
+- **Rotation** : Tournez avec deux doigts pour faire pivoter la carte
+- **Pan** : Glissez avec un doigt pour déplacer la carte
+- **Double tap** : Tapez deux fois pour zoomer rapidement
+- **Fling** : Glissez rapidement pour un défilement inertiel
+
+📖 **Consultez [GESTURES_GUIDE.md](eiffel_tower_map/GESTURES_GUIDE.md) pour le guide complet des gestes!**
+
+### Contrôles de base (boutons)
 - **Navigation** : Faites glisser la carte avec votre doigt pour explorer
 - **Zoom** : Utilisez les boutons + et - (colonne droite) pour zoomer/dézoomer
 
