@@ -1,0 +1,124 @@
+================================================================================
+                    TOUR EIFFEL BATMAN MAP - FLUTTER APP
+================================================================================
+
+DESCRIPTION
+-----------
+Application Flutter multi-plateformes affichant une carte OpenStreetMap 
+interactive centrée sur la Tour Eiffel à Paris, avec un overlay du logo 
+Batman positionné au-dessus du monument.
+
+PLATEFORMES SUPPORTÉES
+----------------------
+✓ Android (API 21+)
+✓ iOS (iOS 12+)
+✓ Web (Chrome, Firefox, Safari, Edge)
+
+FONCTIONNALITÉS PRINCIPALES
+----------------------------
+• Carte interactive OpenStreetMap
+• Centrage automatique sur la Tour Eiffel (48.858370, 2.294481)
+• Overlay personnalisé avec logo Batman (opacité 70%)
+• Marqueur rouge sur la Tour Eiffel
+• Contrôles de zoom interactifs (+/-)
+• Bouton de recentrage rapide
+• Navigation par glissement tactile
+
+TECHNOLOGIES UTILISÉES
+----------------------
+• Flutter SDK 3.8.1+
+• Dart Language
+• flutter_map 7.0.2 (Cartographie)
+• latlong2 0.9.1 (Coordonnées géographiques)
+• OpenStreetMap (Fournisseur de tuiles)
+
+STRUCTURE DU PROJET
+-------------------
+eiffel_tower_map/
+├── lib/
+│   └── main.dart                    # Code principal
+├── assets/
+│   └── images/
+│       ├── batman_logo.png          # Logo Batman PNG
+│       └── batman_logo.svg          # Logo Batman SVG
+├── android/                         # Configuration Android
+├── ios/                             # Configuration iOS
+├── web/                             # Configuration Web
+├── pubspec.yaml                     # Dépendances
+├── run.sh                           # Script de lancement
+├── README.md                        # Documentation utilisateur
+└── GUIDE.md                         # Guide technique détaillé
+
+COMMANDES RAPIDES
+-----------------
+Installation :
+  $ flutter pub get
+
+Lancement Android :
+  $ flutter run -d android
+
+Lancement iOS :
+  $ flutter run -d ios
+
+Lancement Web :
+  $ flutter run -d chrome
+
+Script interactif :
+  $ ./run.sh
+
+Build Release Android :
+  $ flutter build apk --release
+
+Build Release iOS :
+  $ flutter build ios --release
+
+Build Web :
+  $ flutter build web --release
+
+CONFIGURATION
+-------------
+Coordonnées Tour Eiffel : 48.858370, 2.294481
+Zoom initial : 16.0
+Zoom min : 10.0
+Zoom max : 18.0
+Opacité overlay : 0.7 (70%)
+
+PERMISSIONS
+-----------
+Android :
+  • INTERNET
+  • ACCESS_NETWORK_STATE
+
+iOS :
+  • Automatique (gérées par Flutter)
+
+PERSONNALISATION
+----------------
+Pour modifier l'overlay :
+  Éditez main.dart lignes 64-76
+
+Pour changer la position :
+  Éditez main.dart ligne 35
+
+Pour ajuster l'opacité :
+  Éditez main.dart ligne 73
+
+RESSOURCES
+----------
+Documentation Flutter : https://flutter.dev
+Documentation flutter_map : https://docs.fleaflet.dev
+OpenStreetMap : https://www.openstreetmap.org
+
+AUTEUR
+------
+Créé avec Flutter et Claude Code
+
+DATE DE CRÉATION
+----------------
+Octobre 2025
+
+LICENCE
+-------
+Projet éducatif et de démonstration
+
+================================================================================
