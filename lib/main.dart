@@ -49,9 +49,9 @@ class _MapScreenState extends State<MapScreen> {
         mapController: _mapController,
         options: MapOptions(
           initialCenter: eiffelTowerLocation,
-          initialZoom: 16.0,
+          initialZoom: 18.0,
           minZoom: 10.0,
-          maxZoom: 18.0,
+          maxZoom: 22.0,
           initialRotation: 0.0,
           interactionOptions: const InteractionOptions(
             flags: InteractiveFlag
@@ -63,7 +63,7 @@ class _MapScreenState extends State<MapScreen> {
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.example.eiffel_tower_map',
-            maxZoom: 19,
+            maxZoom: 22,
           ),
 
           // Overlay du logo Batman sur la Tour Eiffel (s'adapte au zoom)
@@ -168,7 +168,7 @@ class _MapScreenState extends State<MapScreen> {
                 heroTag: 'reset',
                 onPressed: () {
                   _mapController.rotate(0.0);
-                  _mapController.move(eiffelTowerLocation, 16.0);
+                  _mapController.move(eiffelTowerLocation, 18.0);
                 },
                 tooltip: 'Recentrer et réinitialiser la rotation',
                 child: const Icon(Icons.my_location),
